@@ -2,7 +2,7 @@
 
 Design tests for Analytics functionality on a Battery Monitoring System.
 
-Fill the parts marked '_enter' in the **Tasks** section below.
+Fill the parts marked 'enter' in the **Tasks** section below.
 
 ## Analysis-functionality to be tested
 
@@ -27,8 +27,9 @@ Notification must be sent when a new report is available.
 List the dependencies of the Analysis-functionality.
 
 1. Access to the Server containing the telemetrics in a csv file
-1. _enter dependency
-1. _enter dependency
+2. Need a tool to read data from csv file and storing it in the form, possible for analysis
+3. Report PDF generator library
+4. Messaging Service for Notification
 
 (add more if needed)
 
@@ -40,10 +41,10 @@ What is included in the software unit-test? What is not? Fill this table.
 |---------------------------|---------------|---
 Battery Data-accuracy       | No            | We do not test the accuracy of data
 Computation of maximum      | Yes           | This is part of the software being developed
-Off-the-shelf PDF converter | _enter Yes/No | _enter reasoning
-Counting the breaches       | _enter Yes/No | _enter reasoning
-Detecting trends            | _enter Yes/No | _enter reasoning
-Notification utility        | _enter Yes/No | _enter reasoning
+Off-the-shelf PDF converter | No			      | It involves another tool and writes data and stores file in external source
+Counting the breaches       | Yes		        | It is needed to check whether functionality that counts breaches is working fine
+Detecting trends            | Yes           | can be covered by unit tests as its an functionality, independent from other dependencies
+Notification utility        | Yes           | no end to end testing as notification must be sent to user/admin but fake notification service possible
 
 ### List the Test Cases
 
@@ -52,10 +53,12 @@ Write tests in the form of `<expected output or action>` from `<input>` / when `
 Add to these tests:
 
 1. Write minimum and maximum to the PDF from a csv containing positive and negative readings
-1. Write "Invalid input" to the PDF when the csv doesn't contain expected data
-1. _enter a test
-1. _enter a test
-
+2. Write "Invalid input" to the PDF when the csv doesn't contain expected data
+3. Count the no. of breaches based on threshold in the month from the csv containing readings
+4. Write the count to the PDF from the count value received.
+5. Record date and time in the PDF when the reading is continuously increasing for 30 mins
+6. Send notification when new Report available
+7. Write "Unaccessible Server" to the PDF when not able to access server for csv file.
 (add more)
 
 ### Recognize Fakes and Reality
@@ -64,12 +67,12 @@ Consider the tests for each functionality below.
 In those tests, identify inputs and outputs.
 Enter one part that's real and another part that's faked/mocked.
 
-| Functionality            | Input        | Output                      | Faked/mocked part
-|--------------------------|--------------|-----------------------------|---
-Read input from server     | csv file     | internal data-structure     | Fake the server store
-Validate input             | csv data     | valid / invalid             | None - it's a pure function
-Notify report availability | _enter input | _enter output               | _enter fake or mock
-Report inaccessible server | _enter input | _enter output               | _enter fake or mock
-Find minimum and maximum   | _enter input | _enter output               | _enter fake or mock
-Detect trend               | _enter input | _enter output               | _enter fake or mock
-Write to PDF               | _enter input | _enter output               | _enter fake or mock
+| Functionality            | Input          		  | Output                      | Faked/mocked part                               | 
+|--------------------------|----------------------|-----------------------------|-------------------------------------------------|
+Read input from server     | csv file       		  | internal data-structure     | Fake the server store
+Validate input             | csv data       		  | valid / invalid             | None - it's a pure function
+Notify report availability | Alert_Way            | message via email/sms/log   | mock the notifier
+Report inaccessible server | server accessibility | message as a result         | Fake the server accessibility and mock the Report creation
+Find minimum and maximum   | csv data       		  | min and max                 | none - its a pure function
+Detect trend               | csv data       		  | date and time from csv data | none
+Write to PDF               | analysis data     		| PDF file ready              | unit test not possible as need to access file storage on machine
